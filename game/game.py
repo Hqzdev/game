@@ -1,60 +1,96 @@
 from characters.character_selection import CharacterSelection
 from shop.shop import Shop
+from characters.enemy import Enemy
 
 
 class Game:
     def __init__(self):
         self.hero = None
         self.enemy = None
-        self.enemies = []
+        self.hero_options = CharacterSelection.get_hero_options()
         self.shop = Shop()
 
-    def create_hero(self):
-        """Создание героя"""
-        self.hero = CharacterSelection.choose_character()
+    def set_hero(self, hero):
+        self.hero = hero
+        print(f"Герой {self.hero.name} выбран!")
+
+    def create_enemy(self):
+        """Создает врага для сражения."""
+        self.enemy = Enemy(
+            name="Гоблин",
+            description="Простой враг",
+            strenght="Средний",
+            hp=100,
+            power_damage=10,
+        )
+        print(f"Создан враг: {self.enemy.name} (HP: {self.enemy.hp}).")
 
     def visit_shop(self):
-        """Посещение магазина"""
+        """Посещение магазина."""
         if self.hero:
-            while True:
-                self.shop.display_items()
-                print("\n0. Выйти из магазина")
-                choice = input("Введите номер предмета для покупки: ")
-
-                if choice.isdigit():
-                    choice = int(choice)
-                    if choice == 0:
-                        break
-                    self.shop.buy_item(self.hero, choice)
-                else:
-                    print("Некорректный ввод. Попробуйте ещё раз.")
+            print("\n--- Магазин ---")
+            self.shop.display_items()
         else:
-            print("Сначала создайте героя.")
+            print("Сначала выберите героя!")
+
+    def buy_item(self, item_number):
+        """Покупка предмета из магазина."""
+        if self.hero:
+            success = self.shop.buy_item(self.hero, item_number)
+            if success:
+                print(f"{self.hero.name} купил предмет!")
+            else:
+                print("Покупка не удалась.")
+        else:
+            print("Сначала выберите героя!")
 
     def show_inventory(self):
-        """Отображение инвентаря героя"""
+        """Отображение инвентаря героя."""
         if self.hero:
             print("\n--- Инвентарь ---")
             self.hero.show_inventory()
         else:
-            print("Герой не выбран.")
+            print("Сначала выберите героя!")
 
     def use_item(self, item_name):
-        """Использование предмета из инвентаря"""
+        """Использование предмета из инвентаря."""
         if self.hero:
             self.hero.use_item(item_name)
         else:
-            print("Герой не выбран.")
+            print("Сначала выберите героя!")
 
     def battle(self):
-        """Логика сражений (заглушка для расширения)"""
-        print("Сражение начинается! (пока не реализовано)")
+        """Начало сражения."""
+        if not self.hero:
+            print("Сначала выберите героя!")
+            return
+
+        if not self.enemy:
+            self.create_enemy()
+
+        print(f"\nБитва между {self.hero.name} и {self.enemy.name} начинается!")
+        while self.hero.hp > 0 and self.enemy.hp > 0:
+            # Ход героя
+            hero_damage = self.hero.attack()
+            self.enemy.hp -= hero_damage
+            print(f"{self.hero.name} нанес {hero_damage} урона. У {self.enemy.name} осталось {self.enemy.hp} HP.")
+            if self.enemy.hp <= 0:
+                print(f"{self.hero.name} победил {self.enemy.name}!")
+                break
+
+            # Ход врага
+            enemy_damage = self.enemy.attack()
+            self.hero.hp -= enemy_damage
+            print(f"{self.enemy.name} нанес {enemy_damage} урона. У {self.hero.name} осталось {self.hero.hp} HP.")
+            if self.hero.hp <= 0:
+                print(f"{self.hero.name} был побежден {self.enemy.name}.")
+                break
 
     def play(self):
-        """Основной цикл игры"""
+        """Основной цикл игры."""
         while True:
             print("\n--- Меню ---")
-            print("1. Создать героя")
+            print("1. Выбрать героя")
             print("2. Посмотреть инвентарь")
             print("3. Использовать предмет")
             print("4. Посетить магазин")

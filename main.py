@@ -1,99 +1,82 @@
-import tkinter as tk
 from game.game import Game
 
-
-class GameWindow:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Игра - Герой против врагов")
+class GameConsole:
+    def __init__(self):
         self.game = Game()
         self.is_battle_active = False
-        self.ability_uses_left = 3  # Ограничение на использование способности
+        self.ability_uses_left = 3
 
-        self.create_main_menu()
+    def start(self):
+        """Запуск игры через консоль."""
+        while True:
+            print("\n1. Сражение")
+            print("2. Инвентарь")
+            print("3. Магазин")
+            print("4. Выбрать героя")
+            print("5. Выйти из игры")
 
-    def create_main_menu(self):
-        """Создаёт главное меню с выбором действий."""
-        self.clear_window()
-
-        self.main_menu_frame = tk.Frame(self.root, padx=20, pady=20)
-        self.main_menu_frame.pack()
-
-        # Текстовая область
-        self.text_area = tk.Text(self.main_menu_frame, width=60, height=20, state=tk.DISABLED, wrap=tk.WORD)
-        self.text_area.pack()
-
-        # Кнопки для главного меню
-        tk.Button(self.main_menu_frame, text="1. Сражение", command=self.start_battle).pack(pady=5)
-        tk.Button(self.main_menu_frame, text="2. Инвентарь", command=self.show_inventory).pack(pady=5)
-        tk.Button(self.main_menu_frame, text="3. Магазин", command=self.open_shop).pack(pady=5)
-        tk.Button(self.main_menu_frame, text="4. Выбрать героя", command=self.choose_hero).pack(pady=5)
+            choice = input("Выберите действие: ")
+            if choice == "1":
+                self.start_battle()
+            elif choice == "2":
+                self.show_inventory()
+            elif choice == "3":
+                self.open_shop()
+            elif choice == "4":
+                self.choose_hero()
+            elif choice == "5":
+                print("Выход из игры.")
+                break
+            else:
+                print("Некорректный ввод, попробуйте снова.")
 
     def choose_hero(self):
-        """Позволяет игроку выбрать героя."""
-        self.clear_window()
-        self.hero_selection_frame = tk.Frame(self.root, padx=20, pady=20)
-        self.hero_selection_frame.pack()
-
-        # Заголовок
-        tk.Label(self.hero_selection_frame, text="Выберите героя:", font=("Arial", 14)).pack(pady=10)
-
-        # Отображение героев для выбора
+        """Позволяет выбрать героя."""
+        print("\nВыберите героя:")
         for i, hero in enumerate(self.game.hero_options, start=1):
-            tk.Button(
-                self.hero_selection_frame,
-                text=f"{i}. {hero.name} {hero.last_name} (HP: {hero.hp}, Сила: {hero.power})",
-                command=lambda h=hero: self.select_hero(h)
-            ).pack(pady=5)
-
-    def select_hero(self, hero):
-        """Выбирает героя и возвращает в главное меню."""
-        self.game.set_hero(hero)
-        self.log_to_text_area(f"Герой выбран: {hero.name} {hero.last_name}")
-        self.create_main_menu()
+            print(f"{i}. {hero.name} {hero.last_name} (HP: {hero.hp}, Сила: {hero.power})")
+        choice = input("Введите номер героя: ")
+        if choice.isdigit() and 1 <= int(choice) <= len(self.game.hero_options):
+            self.game.set_hero(self.game.hero_options[int(choice) - 1])
+            print(f"Герой выбран: {self.game.hero.name} {self.game.hero.last_name}")
+        else:
+            print("Некорректный выбор героя.")
 
     def start_battle(self):
         """Начинает сражение."""
         if not self.game.hero:
-            self.log_to_text_area("Сначала выберите героя!")
+            print("Сначала выберите героя!")
             return
 
-        self.clear_window()
-        self.battle_frame = tk.Frame(self.root, padx=20, pady=20)
-        self.battle_frame.pack()
-
-        self.is_battle_active = True
         self.ability_uses_left = 3
         self.game.create_enemy()
+        print(f"\nНачинается бой с врагом: {self.game.enemy.name} (HP: {self.game.enemy.hp})")
 
-        # Поле вывода текста
-        self.text_area = tk.Text(self.battle_frame, width=60, height=20, state=tk.DISABLED, wrap=tk.WORD)
-        self.text_area.pack()
+        while self.game.hero.hp > 0 and self.game.enemy.hp > 0:
+            print("\n1. Ударить")
+            print("2. Использовать способность")
+            action = input("Выберите действие: ")
 
-        # Логи боя
-        self.log_to_text_area(f"Начинается бой с врагом: {self.game.enemy.name} (HP: {self.game.enemy.hp}).")
+            if action == "1":
+                self.attack()
+            elif action == "2":
+                self.use_ability()
+            else:
+                print("Некорректный ввод.")
 
-        # Кнопки для действий
-        self.attack_button = tk.Button(self.battle_frame, text="Ударить", command=self.attack)
-        self.attack_button.pack(pady=5)
+            if self.game.enemy.hp > 0:
+                self.enemy_turn()
 
-        self.ability_button = tk.Button(self.battle_frame, text="Использовать способность", command=self.use_ability)
-        self.ability_button.pack(pady=5)
-
-        self.return_button = tk.Button(self.battle_frame, text="Вернуться в меню", command=self.create_main_menu)
-        self.return_button.pack(pady=5)
+        if self.game.hero.hp <= 0:
+            print(f"К сожалению, {self.game.hero.name} был побеждён {self.game.enemy.name}.")
+        else:
+            print(f"Поздравляем! {self.game.hero.name} победил {self.game.enemy.name}.")
 
     def attack(self):
         """Атака героя."""
         hero_damage = self.game.hero.attack()
         self.game.enemy.hp -= hero_damage
-        self.log_to_text_area(f"{self.game.hero.name} наносит {hero_damage} урона. У {self.game.enemy.name} осталось {self.game.enemy.hp} HP.")
-
-        if self.game.enemy.hp <= 0:
-            self.end_battle(victory=True)
-            return
-
-        self.enemy_turn()
+        print(f"{self.game.hero.name} наносит {hero_damage} урона. У {self.game.enemy.name} осталось {self.game.enemy.hp} HP.")
 
     def use_ability(self):
         """Использование способности."""
@@ -101,89 +84,53 @@ class GameWindow:
             hero_damage = self.game.hero.use_ability()
             self.game.enemy.hp -= hero_damage
             self.ability_uses_left -= 1
-            self.log_to_text_area(f"{self.game.hero.name} использует способность и наносит {hero_damage} урона! У {self.game.enemy.name} осталось {self.game.enemy.hp} HP.")
+            print(f"{self.game.hero.name} использует способность и наносит {hero_damage} урона! У {self.game.enemy.name} осталось {self.game.enemy.hp} HP.")
         else:
-            self.log_to_text_area("Вы больше не можете использовать способность в этом бою!")
-
-        if self.game.enemy.hp <= 0:
-            self.end_battle(victory=True)
-            return
-
-        self.enemy_turn()
+            print("Вы больше не можете использовать способность в этом бою!")
 
     def enemy_turn(self):
         """Ход врага."""
         enemy_damage = self.game.enemy.attack()
         self.game.hero.hp -= enemy_damage
-        self.log_to_text_area(f"{self.game.enemy.name} наносит {enemy_damage} урона. У {self.game.hero.name} осталось {self.game.hero.hp} HP.")
-
-        if self.game.hero.hp <= 0:
-            self.end_battle(victory=False)
-
-    def end_battle(self, victory):
-        """Завершение боя."""
-        self.is_battle_active = False
-
-        if victory:
-            self.log_to_text_area(f"Поздравляем! {self.game.hero.name} победил {self.game.enemy.name}.")
-        else:
-            self.log_to_text_area(f"К сожалению, {self.game.hero.name} был побеждён {self.game.enemy.name}.")
+        print(f"{self.game.enemy.name} наносит {enemy_damage} урона. У {self.game.hero.name} осталось {self.game.hero.hp} HP.")
 
     def show_inventory(self):
         """Отображение инвентаря героя."""
         if not self.game.hero:
-            self.log_to_text_area("Сначала выберите героя!")
+            print("Сначала выберите героя!")
             return
 
-        self.clear_window()
-        self.inventory_frame = tk.Frame(self.root, padx=20, pady=20)
-        self.inventory_frame.pack()
-
-        tk.Label(self.inventory_frame, text=f"Инвентарь {self.game.hero.name}:", font=("Arial", 14)).pack(pady=10)
+        print(f"\nИнвентарь {self.game.hero.name}:")
         for item in self.game.hero.inventory.items:
-            tk.Label(self.inventory_frame, text=f"- {item}").pack()
-
-        tk.Button(self.inventory_frame, text="Вернуться в меню", command=self.create_main_menu).pack(pady=10)
+            print(f"- {item}")
 
     def open_shop(self):
         """Открывает магазин."""
-        self.clear_window()
-        self.shop_frame = tk.Frame(self.root, padx=20, pady=20)
-        self.shop_frame.pack()
+        if not self.game.hero:
+            print("Сначала выберите героя!")
+            return
 
-        tk.Label(self.shop_frame, text="Добро пожаловать в магазин!", font=("Arial", 14)).pack(pady=10)
+        print("\nДобро пожаловать в магазин!")
         for i, item in enumerate(self.game.shop.items, start=1):
-            tk.Button(
-                self.shop_frame,
-                text=f"{i}. {item.name} - {item.description} (Цена: {self.game.shop.prices[item.name]} золота)",
-                command=lambda it=item: self.buy_item(it)
-            ).pack(pady=5)
+            print(f"{i}. {item.name} - {item.description} (Цена: {self.game.shop.prices[item.name]} золота)")
 
-        tk.Button(self.shop_frame, text="Вернуться в меню", command=self.create_main_menu).pack(pady=10)
+        choice = input("Выберите предмет для покупки (номер): ")
+        if choice.isdigit() and 1 <= int(choice) <= len(self.game.shop.items):
+            item = self.game.shop.items[int(choice) - 1]
+            self.buy_item(item)
+        else:
+            print("Некорректный выбор.")
 
     def buy_item(self, item):
         """Покупка предмета."""
         if self.game.hero.gold >= self.game.shop.prices[item.name]:
             self.game.hero.gold -= self.game.shop.prices[item.name]
             self.game.hero.inventory.add_item(item)
-            self.log_to_text_area(f"Вы купили {item.name}.")
+            print(f"Вы купили {item.name}.")
         else:
-            self.log_to_text_area("Недостаточно золота для покупки!")
-
-    def log_to_text_area(self, text):
-        """Выводит текст в текстовое поле."""
-        self.text_area.config(state=tk.NORMAL)
-        self.text_area.insert(tk.END, text + "\n")
-        self.text_area.config(state=tk.DISABLED)
-        self.text_area.see(tk.END)
-
-    def clear_window(self):
-        """Очищает окно."""
-        for widget in self.root.winfo_children():
-            widget.destroy()
+            print("Недостаточно золота для покупки!")
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    game_window = GameWindow(root)
-    root.mainloop()
+    console_game = GameConsole()
+    console_game.start()

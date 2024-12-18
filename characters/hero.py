@@ -50,11 +50,8 @@ class Hero:
         return f"{self.name} {self.last_name} (Уровень: {self.lvl}, Золото: {self.gold})"
 
     def attack(self):
-        """
-        Метод атаки героя.
-        :return: Урон героя.
-        """
-        print(f"{self.name} атакует! Нанесено {self.power_damage} урона.")
+
+        
         return self.power_damage
 
     def add_item_to_inventory(self, item):
@@ -63,9 +60,7 @@ class Hero:
         :param item: Объект предмета.
         """
         if self.inventory.add_item(item):
-            print(f"{item.name} добавлен в инвентарь {self.name}.")
-        else:
-            print(f"Не удалось добавить {item.name}. Инвентарь переполнен.")
+            pass
 
     def use_item(self, item_name):
         """
@@ -74,12 +69,10 @@ class Hero:
         """
         for item in self.inventory.items:
             if item.name == item_name:
-                print(f"{self.name} использует {item.name}.")
                 item.use(self)
                 self.inventory.remove_item(item_name)
-                print(f"{item_name} использован и удалён из инвентаря.")
                 return
-        print(f"{item_name} не найден в инвентаре {self.name}.")
+
 
     def show_inventory(self):
         """

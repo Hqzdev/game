@@ -5,7 +5,7 @@ from items.inventory import Inventory  # Подключаем класс инв�
 
 class CharacterSelection:
     @staticmethod
-    def choose_character():
+    def get_hero_options():
         print('Выбор персонажа: ')
 
         # Создание героев
