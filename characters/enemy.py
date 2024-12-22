@@ -1,3 +1,5 @@
+import random
+
 class Enemy:
     def __init__(self, name, description, strength, abilities, hp, lvl, power_damage, exp):
         self.name = name
@@ -25,7 +27,7 @@ class StreetThug(Enemy):
             abilities=['Скрытный удар'],
             hp=140,
             lvl=1,
-            power_damage=3,
+            power_damage=random.randint(1, 5),
             exp=3
         )
 
@@ -38,7 +40,7 @@ class Killer(Enemy):
             abilities=['Уклонение'],
             hp=100,
             lvl=2,
-            power_damage=5,
+            power_damage=random.randint(3, 8),
             exp=10
         )
 
@@ -51,7 +53,7 @@ class DarkMage(Enemy):
             abilities=['Огненный шар'],
             hp=75,
             lvl=3,
-            power_damage=12,
+            power_damage=random.randint(10, 17),
             exp=20
         )
 
@@ -64,7 +66,7 @@ class DarkLord(Enemy):
             abilities=['Тёмная магия'],
             hp=1000,
             lvl=5,
-            power_damage=25,
+            power_damage=random.randint(20, 35),
             exp=100
         )
 
@@ -77,6 +79,6 @@ class AncientDragon(Enemy):
             abilities=['Огненное дыхание'],
             hp=10000,
             lvl=10,
-            power_damage=50,
+            power_damage=random.randint(40, 70),
             exp=500
         )

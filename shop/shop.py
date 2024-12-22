@@ -3,6 +3,7 @@ from items.armor import Armor
 from items.boots import Boots
 from items.item import Item
 
+
 class Shop:
     def __init__(self):
         self.items = []
@@ -16,28 +17,28 @@ class Shop:
             # Шлем
             self.add_item(Armor(
                 name=f"{rarity} Шлем",
-                description=f"",
+                description=f"Шлем с бонусом ({rarity})",
                 defense=2 * (rarities.index(rarity) + 1)
             ), price=40 * (rarities.index(rarity) + 1))
             
             # Броня
             self.add_item(Armor(
                 name=f"{rarity} Броня",
-                description=f"",
+                description=f"Броня с бонусом ({rarity})",
                 defense=3 * (rarities.index(rarity) + 1)
             ), price=60 * (rarities.index(rarity) + 1))
 
             # Ботинки
             self.add_item(Boots(
                 name=f"{rarity} Ботинки",
-                description=f"",
+                description=f"Ботинки с бонусом ({rarity})",
                 speed=2 * (rarities.index(rarity) + 1)
             ), price=30 * (rarities.index(rarity) + 1))
             
             # Оружие
             self.add_item(Weapon(
                 name=f"{rarity} Меч",
-                description=f"",
+                description=f"Меч с бонусом ({rarity})",
                 attack=5 * (rarities.index(rarity) + 1)
             ), price=70 * (rarities.index(rarity) + 1))
 
@@ -51,7 +52,7 @@ class Shop:
         print("\n--- Магазин ---")
         for i, item in enumerate(self.items, 1):
             price = self.prices[item.name]
-            print(f"{i}. {item.name} (Цена: {price} золота)")
+            print(f"{i}. {item.name} - {item.description} (Цена: {price} золота)")
 
     def buy_item(self, hero, item_number):
         """Покупка предмета героем."""

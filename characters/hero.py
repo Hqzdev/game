@@ -1,29 +1,6 @@
 class Hero:
     def __init__(self, lvl, name, last_name, lor, history, hp, old, gender, spells, radius, weaknesses,
                  speed, intelligence, power, agility, lucky, power_damage, exp, inventory, gold=100):
-        """
-        Инициализация героя.
-        :param lvl: Уровень героя.
-        :param name: Имя героя.
-        :param last_name: Фамилия героя.
-        :param lor: Лор героя.
-        :param history: История героя.
-        :param hp: Очки здоровья героя.
-        :param old: Возраст героя.
-        :param gender: Пол героя.
-        :param spells: Заклинания героя.
-        :param radius: Радиус атак или эффектов героя.
-        :param weaknesses: Слабости героя.
-        :param speed: Скорость героя.
-        :param intelligence: Интеллект героя.
-        :param power: Сила героя.
-        :param agility: Ловкость героя.
-        :param lucky: Удача героя.
-        :param power_damage: Урон героя.
-        :param exp: Опыт героя.
-        :param inventory: Инвентарь героя.
-        :param gold: Золото героя.
-        """
         self.lvl = lvl
         self.name = name
         self.last_name = last_name
