@@ -1,58 +1,32 @@
 class Enemy:
-    def __init__(self, name, description, strenght, abilities, hp, old, last_name, lor, lvl, history, gender, spells, weaknesses, speed, intelligence, power, agility, radius, lucky, power_damage, exp):
+    def __init__(self, name, description, strength, abilities, hp, lvl, power_damage, exp):
         self.name = name
         self.description = description
-        self.strenght = strenght
+        self.strength = strength
         self.abilities = abilities
         self.hp = hp
-        self.old = old
         self.lvl = lvl
-        self.last_name = last_name
-        self.lor = lor
-        self.history = history
-        self.gender = gender
-        self.spells = spells
-        self.radius = radius
-        self.weaknesses = weaknesses
-        self.speed = speed
-        self.intelligence = intelligence
-        self.power = power
-        self.agility = agility
-        self.lucky = lucky
         self.power_damage = power_damage
         self.exp = exp
 
     def attack(self):
-        print(f'Наносит удар')
+        print(f'{self.name} атакует!')
         return self.power_damage
 
     def __str__(self):
-        return f"{self.name} - {self.description} (Сила: {self.strenght})"
+        return f"{self.name} - {self.description} (Сила: {self.strength})"
 
 class StreetThug(Enemy):
     def __init__(self):
         super().__init__(
             name='Бандит',
             description='Уличный бандит',
-            strenght='Слабая',
+            strength='Слабая',
             abilities=['Скрытный удар'],
             hp=140,
-            old=20,
             lvl=1,
-            last_name='Бандос',
-            lor='город',
-            history='ff',
-            gender='ede',
-            spells=[],
-            radius=135,
-            weaknesses=45,
-            speed=10,
-            intelligence=5, 
-            power=3, 
-            agility=3, 
-            lucky=3, 
-            power_damage=3, 
-            exp=3, 
+            power_damage=3,
+            exp=3
         )
 
 class Killer(Enemy):
@@ -60,101 +34,49 @@ class Killer(Enemy):
         super().__init__(
             name='Наемник',
             description='Наемный убийца',
-            strenght='Средняя',
+            strength='Средняя',
             abilities=['Уклонение'],
             hp=100,
-            old=32,
-            lvl=1,
-            last_name='Бандос',
-            lor='город',
-            history='ff',
-            gender='ede',
-            spells=[],
-            radius=135,
-            weaknesses=45,
-            speed=10,
-            intelligence=5, 
-            power=3, 
-            agility=3, 
-            lucky=3, 
-            power_damage=3, 
-            exp=3, 
+            lvl=2,
+            power_damage=5,
+            exp=10
         )
 
 class DarkMage(Enemy):
     def __init__(self):
         super().__init__(
             name='Темный маг',
-            description='Темный маг',
-            strenght='Сильняя',
+            description='Могущественный маг',
+            strength='Сильная',
             abilities=['Огненный шар'],
             hp=75,
-            old=450,
-            last_name='Бандос',
-            lor='город',
-            lvl=1,
-            history='ff',
-            gender='ede',
-            spells=[],
-            radius=135,
-            weaknesses=45,
-            speed=10,
-            intelligence=5, 
-            power=3, 
-            agility=3, 
-            lucky=3, 
-            power_damage=3, 
-            exp=3, 
+            lvl=3,
+            power_damage=12,
+            exp=20
         )
 
 class DarkLord(Enemy):
     def __init__(self):
         super().__init__(
             name='Темный лорд',
-            description='Могучий волшебник',
-            strenght='Эпическая',
-            abilities=['Ужасные заклинания'],
+            description='Повелитель зла',
+            strength='Эпическая',
+            abilities=['Тёмная магия'],
             hp=1000,
-            old=3465,
-            last_name='Бандос',
-            lor='город',
-            history='ff',
-            gender='ede',
-            lvl=1,
-            spells=[],
-            radius=135,
-            weaknesses=45,
-            speed=10,
-            intelligence=5, 
-            power=3, 
-            agility=3, 
-            lucky=3, 
-            power_damage=3, 
-            exp=3,
+            lvl=5,
+            power_damage=25,
+            exp=100
         )
 
 class AncientDragon(Enemy):
     def __init__(self):
         super().__init__(
             name='Древний дракон',
-            description='Древний дракон',
-            strenght='Мифическая',
-            abilities=['Удар лапой'],
+            description='Мифический зверь',
+            strength='Мифическая',
+            abilities=['Огненное дыхание'],
             hp=10000,
-            old=32167,
-            last_name='Бандос',
-            lor='город',
-            history='ff',
-            gender='ede',
-            spells=[],
-            radius=135,
-            weaknesses=45,
-            speed=10,
-            lvl=1,
-            intelligence=5, 
-            power=3, 
-            agility=3, 
-            lucky=3, 
-            power_damage=3, 
-            exp=3,
+            lvl=10,
+            power_damage=50,
+            exp=500
         )

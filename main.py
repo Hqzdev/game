@@ -38,7 +38,6 @@ class GameConsole:
         choice = input("Введите номер героя: ")
         if choice.isdigit() and 1 <= int(choice) <= len(self.game.hero_options):
             self.game.set_hero(self.game.hero_options[int(choice) - 1])
-            print(f"Герой выбран: {self.game.hero.name} {self.game.hero.last_name}")
         else:
             print("Некорректный выбор героя.")
 

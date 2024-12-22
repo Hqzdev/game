@@ -44,8 +44,6 @@ class Hero:
         self.exp = exp
         self.inventory = inventory
         self.gold = gold
-        print(f"Герой {self.name} {self.last_name} создан! Уровень: {self.lvl}, Золото: {self.gold}")
-
     def __str__(self):
         return f"{self.name} {self.last_name} (Уровень: {self.lvl}, Золото: {self.gold})"
 

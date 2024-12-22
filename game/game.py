@@ -1,6 +1,8 @@
 from characters.character_selection import CharacterSelection
 from shop.shop import Shop
 from characters.enemy import Enemy
+import random
+from characters.enemy import StreetThug, Killer, DarkMage, DarkLord, AncientDragon
 
 
 class Game:
@@ -15,14 +17,9 @@ class Game:
         print(f"Герой {self.hero.name} выбран!")
 
     def create_enemy(self):
-        """Создает врага для сражения."""
-        self.enemy = Enemy(
-            name="Гоблин",
-            description="Простой враг",
-            strenght="Средний",
-            hp=100,
-            power_damage=10,
-        )
+
+        enemy_classes = [StreetThug, Killer, DarkMage, DarkLord, AncientDragon]
+        self.enemy = random.choice(enemy_classes)()  # Создает случайного врага
         print(f"Создан враг: {self.enemy.name} (HP: {self.enemy.hp}).")
 
     def visit_shop(self):

@@ -1,14 +1,16 @@
 from characters.hero import Hero
 from items.weapon import Weapon
 from items.armor import Armor
-from items.inventory import Inventory  # Подключаем класс инвентаря
+from items.inventory import Inventory
 
 class CharacterSelection:
     @staticmethod
     def get_hero_options():
-        print('Выбор персонажа: ')
-
-        # Создание героев
+        # Создаём базовые предметы
+        basic_weapon = Weapon("Меч", "Простой меч", attack=10)
+        basic_armor = Armor("Кожаная броня", "Легкая защита", defense=15)
+        
+        # Создаём героев
         heroes = [
             Hero(lvl=1, name="Артур", last_name="Стрелок", lor="Лес", history="Рыцарь, защитник королевства",
                  hp=150, old=30, gender="Мужской", spells=['Критический удар'], radius=5, weaknesses={'Стрелок'},
@@ -50,29 +52,10 @@ class CharacterSelection:
                  speed=7, intelligence=5, power=35, agility=5, lucky=3, power_damage=50, exp=0,
                  inventory=Inventory(capacity=10))
         ]
-
-        # Базовые предметы
-        basic_weapon = Weapon("Меч", "Простой меч", attack=10)
-        basic_armor = Armor("Кожаная броня", "Легкая защита", defense=15)
-        
         # Наполнение инвентаря каждого героя
         for hero in heroes:
             hero.add_item_to_inventory(basic_weapon)
             hero.add_item_to_inventory(basic_armor)
 
-        # Отображение списка героев для выбора
-        for index, hero in enumerate(heroes):
-            print(f'{index + 1}. {hero.name} {hero.last_name} (Здоровье: {hero.hp}, '
-                  f'Сила: {hero.power}, Интеллект: {hero.intelligence}, История: {hero.history})')
+        return heroes  
 
-        # Выбор персонажа
-        try:
-            choice = int(input('Введите номер персонажа: '))
-            if 1 <= choice <= len(heroes):
-                return heroes[choice - 1]
-            else:
-                print('Некорректный выбор.')
-                return None
-        except ValueError:
-            print('Введите число.')
-            return None

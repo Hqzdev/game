@@ -6,7 +6,6 @@ class Inventory:
         """
         self.capacity = capacity
         self.items = []  # Список предметов в инвентаре
-        print(f"Инвентарь создан. Вместимость: {self.capacity}")
 
     def add_item(self, item):
         """
@@ -16,7 +15,6 @@ class Inventory:
         """
         if len(self.items) < self.capacity:
             self.items.append(item)
-            print(f"{item.name} добавлен в инвентарь.")
             return True
         else:
             print("Инвентарь переполнен! Увеличьте вместимость или освободите место.")
